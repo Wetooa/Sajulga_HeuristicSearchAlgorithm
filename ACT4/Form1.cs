@@ -25,8 +25,8 @@ namespace ACT4
         ArrayList bMoves;
         Object chosenMove;
 
-        double temperature = n;
-        double coolingRate = 0.01;
+        double temperature = 6;
+        double coolingRate = 0.99;
         Random random = new Random();
 
         public Form1()
@@ -39,24 +39,32 @@ namespace ACT4
             currentState = new SixState(startState);
 
             updateUI();
-            label1.Text = "Whatever Attacking pairs: " + getAttackingPairs(startState);
+            label1.Text = "Attacking pairs: " + getAttackingPairs(startState);
         }
 
         private void updateUI()
         {
-            // pictureBox1.Refresh();
+            //pictureBox1.Refresh();
             pictureBox2.Refresh();
 
-            // label1.Text = "Attacking pairs: " + getAttackingPairs(startState);
-            label3.Text = "Temperature: " + temperature + " | Attacking pairs: " + getAttackingPairs(currentState);
+            //label1.Text = "Attacking pairs: " + getAttackingPairs(startState);
+            label3.Text = "Attacking pairs: " + getAttackingPairs(currentState);
             label4.Text = "Moves: " + moveCounter;
             hTable = getHeuristicTableForPossibleMoves(currentState);
             bMoves = getBestMoves(hTable);
 
             listBox1.Items.Clear();
-            foreach (Point move in bMoves)
+            foreach (var move in bMoves)
             {
-                listBox1.Items.Add(move);
+                if (move is Point pointMove)
+                {
+                    listBox1.Items.Add(pointMove);
+                }
+                else
+                {
+                    // Handle the case where move is not a Point
+                    throw new InvalidCastException("Item in bMoves is not of type Point.");
+                }
             }
 
             if (bMoves.Count > 0)
@@ -116,29 +124,29 @@ namespace ACT4
         private int getAttackingPairs(SixState f)
         {
             int attackers = 0;
-            
+
             for (int rf = 0; rf < n; rf++)
             {
-                for (int tar = rf+1; tar < n; tar++)
+                for (int tar = rf + 1; tar < n; tar++)
                 {
                     // get horizontal attackers
                     if (f.Y[rf] == f.Y[tar])
                         attackers++;
                 }
-                for (int tar = rf+1; tar < n; tar++)
+                for (int tar = rf + 1; tar < n; tar++)
                 {
                     // get diagonal down attackers
                     if (f.Y[tar] == f.Y[rf] + tar - rf)
                         attackers++;
                 }
-                for (int tar = rf+1; tar < n; tar++)
+                for (int tar = rf + 1; tar < n; tar++)
                 {
                     // get diagonal up attackers
                     if (f.Y[rf] == f.Y[tar] + tar - rf)
                         attackers++;
                 }
             }
-            
+
             return attackers;
         }
 
@@ -159,34 +167,15 @@ namespace ACT4
             return hStates;
         }
 
-        private ArrayList getBestMoves(int[,] heuristicTable)
+        private double acceptanceProbability(int currentEnergy, int neighborEnergy, double temperature)
         {
-            ArrayList simulatedAnnealingMove = getSimulatedAnnealingBestMoves();
-            if simulatedAnnealingMove.Count > 0)
-                return simulatedAnnealingMove;
-
-            ArrayList bestMoves = new ArrayList();
-            int bestHeuristicValue = heuristicTable[0, 0];
-
-            for (int i = 0; i < n; i++)
+            // If the neighbor is better, accept it
+            if (neighborEnergy < currentEnergy)
             {
-                for (int j = 0; j < n; j++)
-                {
-                    if (bestHeuristicValue > heuristicTable[i, j])
-                    {
-                        bestHeuristicValue = heuristicTable[i, j];
-                        bestMoves.Clear();
-                        if (currentState.Y[i] != j)
-                            bestMoves.Add(new Point(i, j));
-                    } else if (bestHeuristicValue == heuristicTable[i,j])
-                    {
-                        if (currentState.Y[i] != j)
-                            bestMoves.Add(new Point(i, j));
-                    }
-                }
+                return 1.0;
             }
-            label5.Text = "Possible Moves (H=" + bestHeuristicValue + ")";
-            return bestMoves;
+            // If the neighbor is worse, calculate an acceptance probability
+            return Math.Exp((currentEnergy - neighborEnergy) / temperature);
         }
 
         private ArrayList getSimulatedAnnealingBestMoves()
@@ -207,7 +196,7 @@ namespace ACT4
                 // Decide if we should accept the neighbor
                 if (acceptanceProbability(currentEnergy, neighborEnergy, temperature) > random.NextDouble())
                 {
-                    simulatedAnnealingMove.Add(new SixState(neighborState));
+                    simulatedAnnealingMove.Add(new Point(randomIndex, randomValue));
                 }
 
                 // Cool down
@@ -217,20 +206,38 @@ namespace ACT4
             return simulatedAnnealingMove;
         }
 
-        private void simulatedAnnealing()
+
+        private ArrayList getBestMoves(int[,] heuristicTable)
         {
+            ArrayList simulatedAnnealingMove = getSimulatedAnnealingBestMoves();
+            if (simulatedAnnealingMove.Count > 0)
+                return simulatedAnnealingMove;
+
+
+            ArrayList bestMoves = new ArrayList();
+            int bestHeuristicValue = heuristicTable[0, 0];
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (bestHeuristicValue > heuristicTable[i, j])
+                    {
+                        bestHeuristicValue = heuristicTable[i, j];
+                        bestMoves.Clear();
+                        if (currentState.Y[i] != j)
+                            bestMoves.Add(new Point(i, j));
+                    } else if (bestHeuristicValue == heuristicTable[i, j])
+                    {
+                        if (currentState.Y[i] != j)
+                            bestMoves.Add(new Point(i, j));
+                    }
+                }
+            }
+            label5.Text = "Possible Moves (H=" + bestHeuristicValue + ") | Temp: (H="+ temperature +")";
+            return bestMoves;
         }
 
-        private double acceptanceProbability(int currentEnergy, int neighborEnergy, double temperature)
-        {
-            // If the neighbor is better, accept it
-            if (neighborEnergy < currentEnergy)
-            {
-                return 1.0;
-            }
-            // If the neighbor is worse, calculate an acceptance probability
-            return Math.Exp((currentEnergy - neighborEnergy) / temperature);
-        }
 
 
         private Object chooseMove(ArrayList possibleMoves)
@@ -270,6 +277,7 @@ namespace ACT4
         {
             startState = randomSixState();
             currentState = new SixState(startState);
+            temperature = 6;
 
             moveCounter = 0;
 
@@ -280,6 +288,7 @@ namespace ACT4
 
         private void button2_Click(object sender, EventArgs e)
         {
+            temperature = 6;
             while (getAttackingPairs(currentState) > 0)
             {
                 executeMove((Point)chosenMove);

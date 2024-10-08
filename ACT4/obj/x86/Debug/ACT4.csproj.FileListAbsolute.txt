@@ -25,5 +25,13 @@ D:\SCHOOL DATA\MY COURSES\Intelligent Systems\Sample Prgrograms\tornilla\ACT4\AC
 D:\SCHOOL DATA\MY COURSES\Intelligent Systems\Sample Prgrograms\tornilla\ACT4\ACT4\obj\x86\Debug\ACT4.csproj.CoreCompileInputs.cache
 D:\SCHOOL DATA\MY COURSES\Intelligent Systems\Sample Prgrograms\tornilla\ACT4\ACT4\obj\x86\Debug\ACT4.exe
 D:\SCHOOL DATA\MY COURSES\Intelligent Systems\Sample Prgrograms\tornilla\ACT4\ACT4\obj\x86\Debug\ACT4.pdb
-C:\Users\Wetooa\Documents\educational\is\N Queens\N Queens\ACT4\obj\x86\Debug\ACT4.exe
-C:\Users\Wetooa\Documents\educational\is\N Queens\N Queens\ACT4\obj\x86\Debug\ACT4.pdb
+C:\Users\Wetooa\Documents\educational\is\N Queens - Temp\N Queens\ACT4\bin\Debug\ACT4.exe.config
+C:\Users\Wetooa\Documents\educational\is\N Queens - Temp\N Queens\ACT4\bin\Debug\ACT4.exe
+C:\Users\Wetooa\Documents\educational\is\N Queens - Temp\N Queens\ACT4\bin\Debug\ACT4.pdb
+C:\Users\Wetooa\Documents\educational\is\N Queens - Temp\N Queens\ACT4\obj\x86\Debug\ACT4.csproj.AssemblyReference.cache
+C:\Users\Wetooa\Documents\educational\is\N Queens - Temp\N Queens\ACT4\obj\x86\Debug\ACT4.Form1.resources
+C:\Users\Wetooa\Documents\educational\is\N Queens - Temp\N Queens\ACT4\obj\x86\Debug\ACT4.Properties.Resources.resources
+C:\Users\Wetooa\Documents\educational\is\N Queens - Temp\N Queens\ACT4\obj\x86\Debug\ACT4.csproj.GenerateResource.cache
+C:\Users\Wetooa\Documents\educational\is\N Queens - Temp\N Queens\ACT4\obj\x86\Debug\ACT4.csproj.CoreCompileInputs.cache
+C:\Users\Wetooa\Documents\educational\is\N Queens - Temp\N Queens\ACT4\obj\x86\Debug\ACT4.exe
+C:\Users\Wetooa\Documents\educational\is\N Queens - Temp\N Queens\ACT4\obj\x86\Debug\ACT4.pdb
